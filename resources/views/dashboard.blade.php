@@ -12,9 +12,11 @@
                 <x-button>Create New</x-button>
             </div>
             <div class="overflow-hidden">
-                @foreach($containers as $container)
+                @forelse($containers as $container)
                     <x-server-item id="{{ $container->id }}" name="{{ $container->name }}" desc="{{ $container->description }}" image="{{ $container->containerType->image }}" status="{{ $container->status }}"/>
-                @endforeach
+                @empty
+                    <x-card class="mt-6">It seems like you don't have any containers yet.</x-card>
+                @endforelse
             </div>
         </div>
     </div>

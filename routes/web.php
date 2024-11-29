@@ -16,4 +16,9 @@ Route::middleware([
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
     Route::get('/container/{id}', [Index::class, 'show'])->name('container.index');
+    Route::get('/container/{id}/files', [Index::class, 'filesystem'])->name('container.files');
+    Route::get('/container/{id}/users', [Index::class, 'filesystem'])->name('container.users');
+    Route::get('/container/{id}/databases', [Index::class, 'filesystem'])->name('container.databases');
+    Route::get('/container/{id}/settings', [Index::class, 'filesystem'])->name('container.settings');
+
 });

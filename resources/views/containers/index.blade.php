@@ -1,8 +1,27 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Container - {{ $container->name }}
-        </h2>
+        <div class="w-full flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Container - {{ $container->name }}
+            </h2>
+            <div>
+                <div class="flex items-center">
+                    @if($container->status === 'Online')
+                        <i class="text-green-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
+                    @elseif($container->status === 'Starting')
+                        <i class="text-yellow-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
+                    @elseif($container->status === 'Stopping')
+                        <i class="text-red-700 fa-solid fa-spinner fa-spin-pulse mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
+                    @elseif($container->status === 'Installing')
+                        <i class="text-orange-500 fa-solid fa-spinner fa-spin-pulse mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
+                    @else
+                        <i class="text-red-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
+                    @endif
+                    <span class="text-sm font-medium text-gray-800">{{ $container->status }}</span>
+                </div>
+            </div>
+        </div>
+
     </x-slot>
 
     <div class="justify-center items-center flex">
@@ -14,26 +33,21 @@
             </div>
             <div class="grid grid-cols-6 gap-10">
                 <div class="col-span-2">
-                    <div class="drop-shadow-2xl">
-                        <div class="bg-gray-100 p-2 border-2 border-b-0 rounded-t-2xl">
-                            <h3 class="font-bold uppercase text-mb ml-2">{{ $container->name }}</h3>
+                    <x-card title="{{ $container->name }}">
+                        <div class="uppercase grid grid-cols-2 grid-rows-1">
+                            <p class="font-bold">Memory:</p> <p class="text-right"><span id="memory">100MB</span> / 1000MB</p>
+                            <p class="font-bold">Disk:</p> <p class="text-right"><span id="memory">10GB</span> / 100GB</p>
+                            <p class="font-bold">CPU:</p> <p class="text-right"><span id="memory">23%</span></p>
                         </div>
-                        <div class="bg-white p-4 border-2 border-t-0 rounded-b-2xl">
-                            <div class="uppercase grid grid-cols-2 grid-rows-1">
-                                <p class="font-bold">Memory:</p> <p class="text-right"><span id="memory">100MB</span> / 1000MB</p>
-                                <p class="font-bold">Disk:</p> <p class="text-right"><span id="memory">10GB</span> / 100GB</p>
-                                <p class="font-bold">CPU:</p> <p class="text-right"><span id="memory">23%</span></p>
-                            </div>
-                            <hr class="my-3 font-bold">
-                            <div class="w-full flex justify-center">
-                                <div class="grid grid-cols-3 gap-2 w-2/3 justify-center items-center">
-                                    <x-button class="flex items-center justify-center">Start</x-button>
-                                    <x-button class="flex items-center justify-center bg-blue-600">Restart</x-button>
-                                    <x-button class="flex items-center justify-center bg-red-400">Stop</x-button>
-                                </div>
+                        <hr class="my-3 font-bold">
+                        <div class="w-full flex justify-center">
+                            <div class="grid grid-cols-3 gap-2 w-2/3 justify-center items-center">
+                                <x-button class="flex items-center justify-center">Start</x-button>
+                                <x-button class="flex items-center justify-center bg-blue-600">Restart</x-button>
+                                <x-button class="flex items-center justify-center bg-red-400">Stop</x-button>
                             </div>
                         </div>
-                    </div>
+                    </x-card>
                 </div>
                 <div class="col-span-4 w-full mx-auto bg-gray-800 rounded-lg shadow-lg flex flex-col h-[40vh]">
                     <div id="consoleLogs" class="flex-1 overflow-y-auto p-4 bg-gray-900 rounded-t-lg border-b border-gray-700">

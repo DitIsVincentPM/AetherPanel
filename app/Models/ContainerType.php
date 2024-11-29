@@ -10,7 +10,7 @@ class ContainerType extends Model
     use HasFactory;
 
     // Tabelnaam (indien de standaardnaam niet overeenkomt)
-    protected $table = 'containertypes';
+    protected $table = 'container_types';
 
     // Vulbare velden
     protected $fillable = [
