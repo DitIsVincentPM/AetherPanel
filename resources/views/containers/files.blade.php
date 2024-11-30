@@ -5,20 +5,7 @@
                 Container - {{ $container->name }}
             </h2>
             <div>
-                <div class="flex items-center">
-                    @if($container->status === 'Online')
-                        <i class="text-green-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
-                    @elseif($container->status === 'Starting')
-                        <i class="text-yellow-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
-                    @elseif($container->status === 'Stopping')
-                        <i class="text-red-700 fa-solid fa-spinner fa-spin-pulse mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
-                    @elseif($container->status === 'Installing')
-                        <i class="text-orange-500 fa-solid fa-spinner fa-spin-pulse mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
-                    @else
-                        <i class="text-red-500 fa-solid fa-circle fa-beat mr-2" style="--fa-animation-duration: 1s; --fa-beat-scale: 1.05;"></i>
-                    @endif
-                    <span class="text-sm font-medium text-gray-800">{{ $container->status }}</span>
-                </div>
+                <livewire:container-status :containerId="$container->id" />
             </div>
         </div>
     </x-slot>

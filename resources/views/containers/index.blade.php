@@ -1,14 +1,14 @@
 <x-app-layout>
-        <x-slot name="header">
-            <div class="w-full flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Container - {{ $container->name }}
-                </h2>
-                <div>
-                    <livewire:container-status :containerId="$container->id" />
-                </div>
+    <x-slot name="header">
+        <div class="w-full flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Container - {{ $container->name }}
+            </h2>
+            <div>
+                <livewire:container-status :containerId="$container->id" />
             </div>
-        </x-slot>
+        </div>
+    </x-slot>
 
     <x-slot name="subnav">
         <x-container-nav></x-container-nav>
@@ -17,122 +17,70 @@
         <div class="grid grid-cols-6 gap-10">
             <div class="col-span-2">
                 <x-card title="{{ $container->name }}">
-                    <div class="uppercase grid grid-cols-2 grid-rows-1">
-                        <p class="font-bold">Memory:</p> <p class="text-right"><span id="memory">100MB</span> / 1000MB</p>
-                        <p class="font-bold">Disk:</p> <p class="text-right"><span id="memory">10GB</span> / 100GB</p>
-                        <p class="font-bold">CPU:</p> <p class="text-right"><span id="memory">23%</span></p>
-                    </div>
+                    <livewire:m-d-c-usage :container="$container" />
                     <hr class="my-3 font-bold">
                     <div class="w-full flex justify-center">
                         <livewire:container-controls :container="$container" />
                     </div>
                 </x-card>
             </div>
-            <!-- Console UI -->
-            <div class="col-span-4 w-full mx-auto bg-gray-800 rounded-lg shadow-lg flex flex-col h-[40vh]">
-                <div id="consoleLogs" class="flex-1 overflow-y-auto p-4 bg-gray-900 rounded-t-lg border-b border-gray-700">
-                    <p class="text-gray-400">Welcome to the Console Interface! Type commands below.</p>
-                </div>
-
-                <div class="p-3 bg-gray-800 rounded-b-lg border-t border-gray-700">
-                    <form id="consoleForm" class="flex items-center">
-                        <input
-                            type="text"
-                            id="consoleInput"
-                            class="flex-1 p-2 rounded-md bg-gray-700 text-gray-300 placeholder-gray-500 border border-gray-600 focus:outline-none"
-                            placeholder="Type your command here...">
-                        <button
-                            type="submit"
-                            class="ml-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none">
-                            Run
-                        </button>
-                    </form>
-                </div>
+            <!-- Terminal UI -->
+            <div class="col-span-4 w-full mx-auto rounded-lg flex flex-col h-[40vh]">
+                <div id="terminal-container" class="flex-1 overflow-hidden rounded-lg"></div>
             </div>
         </div>
     </div>
+
+    <!-- Add required styles for xterm.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm/css/xterm.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const consoleLogs = document.getElementById('consoleLogs');
-            const consoleForm = document.getElementById('consoleForm');
-            const consoleInput = document.getElementById('consoleInput');
-
-            const socket = io('http://localhost:3000'); // Adjust if needed
+            const terminalContainer = document.getElementById('terminal-container');
+            const socket = io('http://localhost:3000'); // Adjust WebSocket URL as needed
 
             // Get the containerId from Laravel Blade template
             const containerId = "{{ $container->docker_id }}";
 
-            // Join log streaming for a specific container
-            socket.emit('stream-logs', containerId);
-            const formatLog = (log, type) => {
-                const logElement = document.createElement('p');
-                logElement.classList.add('text-sm');
-                logElement.classList.add('text-pretty');
+            // Initialize XTerm.js Terminal
+            const term = new Terminal({ cursorBlink: true, theme: { background: '#1e1e1e', foreground: '#d4d4d4' } });
+            const fitAddon = new window.FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
 
-                const lines = log.split('\n');
+            // Open terminal in the container
+            term.open(terminalContainer);
+            fitAddon.fit();
 
-                let cleanedLog = lines.map(line => {
-                    // Verwijder niet-standaard karakters (alles behalve letters, cijfers, spaties en gangbare leestekens)
-                    let cleanedLine = line.replace(/[^a-zA-Z0-9\s.,!?()-]/g, '');
+            // Emit the start-terminal event to the server
+            socket.emit('start-terminal', { containerId });
 
-                    if (cleanedLine.includes('[')) {
-                        cleanedLine = cleanedLine.split('[').slice(1).join('[');
-
-                        const timestampEndIndex = cleanedLine.indexOf(']');
-                        if (timestampEndIndex !== -1) {
-                            cleanedLine = cleanedLine.slice(timestampEndIndex + 1).trim();
-                        }
-                    }
-
-                    return cleanedLine;
-                }).join('\n');
-
-                logElement.textContent = cleanedLog;
-
-                if (type === 'stdout') {
-                    logElement.classList.add('text-green-300');
-                } else if (type === 'stderr') {
-                    logElement.classList.add('text-red-500');
-                } else {
-                    logElement.classList.add('text-gray-300');
-                }
-
-                return logElement;
-            };
-
-
-            // Append logs to console with color formatting
-            socket.on('container-logs', (log) => {
-                const logElement = formatLog(log, 'stdout');
-                consoleLogs.appendChild(logElement);
-                consoleLogs.scrollTop = consoleLogs.scrollHeight;
+            // Listen for terminal output
+            socket.on('terminal-output', (data) => {
+                term.write(data);
             });
 
-            socket.on('container-logs-end', (message) => {
-                const logElement = formatLog(message, 'stdout');
-                logElement.classList.add('text-yellow-500'); // Yellow for end of logs
-                consoleLogs.appendChild(logElement);
+            term.onData((data) => {
+                // Ensure the input is a string
+                socket.emit('terminal-input', data.toString());
             });
 
-            // Send command to backend
-            consoleForm.addEventListener('submit', (e) => {
-                e.preventDefault();
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                fitAddon.fit();
+            });
 
-                const command = consoleInput.value;
-                if (!command.trim()) return;
+            // Display terminal session end or error messages
+            socket.on('terminal-end', () => {
+                term.write('\r\nTerminal session ended.\r\n');
+            });
 
-                socket.emit('send-command', { containerId, command });
-                consoleInput.value = '';
+            socket.on('terminal-error', (error) => {
+                term.write(`\r\nError: ${error}\r\n`);
             });
         });
     </script>
-
-    <style>
-        #consoleLogs p {
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin-bottom: 5px;
-        }
-    </style>
 </x-app-layout>
