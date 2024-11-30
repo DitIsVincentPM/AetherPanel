@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Container;
 
-class Dashboard
+class DashboardController
 {
     public function index()
     {

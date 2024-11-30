@@ -66,8 +66,9 @@
                             </div>
                             @if(Auth::user()->hasRole('admin'))
                                 <x-dropdown-link href="{{ route('admin.dashboard') }}">
-                                    {{ __('Admin') }}
+                                    {{ __('Admin Dashboard') }}
                                 </x-dropdown-link>
+                                <div class="border-t border-gray-200"></div>
                             @endif
 
                             <x-dropdown-link href="{{ route('profile.show') }}">
@@ -132,6 +133,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
+                    {{ __('Admin') }}
+                </x-responsive-nav-link>
+
                 <!-- Account Management -->
                 <x-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                     {{ __('Profile') }}

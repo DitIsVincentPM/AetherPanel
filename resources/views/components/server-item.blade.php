@@ -2,10 +2,12 @@
 <a href="{{ route('container.index', ['id' => $id]) }}">
 <div class="relative bg-white rounded-lg shadow-md flex items-center overflow-hidden mt-4">
     <!-- Linker sectie met afbeelding -->
+    @if($image != null)
     <div class="relative flex-shrink-0 w-2/12 h-20">
         <img src="{{ $image }}" alt="Achtergrond" class="absolute top-0 left-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-l from-white via-transparent to-transparent"></div>
     </div>
+    @endif
 
     <!-- Rechter sectie met tekst en status -->
     <div class="flex-1 flex items-center justify-between px-6 py-4">

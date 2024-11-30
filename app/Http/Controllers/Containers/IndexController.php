@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Containers;
 
 use App\Models\Container;
 
-class Index
+class IndexController
 {
     public function show($id)
     {

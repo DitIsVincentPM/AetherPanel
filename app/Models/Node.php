@@ -5,31 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Container extends Model
+class Node extends Model
 {
     use HasFactory;
 
-    // Tabelnaam (indien de standaardnaam niet overeenkomt)
-    protected $table = 'containers';
+    protected $table = 'nodes';
 
-    // Vulbare velden
     protected $fillable = [
+        'node_id',
         'name',
-        'description',
-        'containertype',
-        'status',
+        'ip',
+        'port',
+        'status'
     ];
 
-    // Status waarden
     const STATUS_ONLINE = 'Online';
     const STATUS_STARTING = 'Starting';
     const STATUS_OFFLINE = 'Offline';
     const STATUS_STOPPING = 'Stopping';
     const STATUS_INSTALLING = 'Installing';
-
-    // Relatie met ContainerType
-    public function containerType()
-    {
-        return $this->belongsTo(ContainerType::class, 'containertype', 'id');
-    }
 }
