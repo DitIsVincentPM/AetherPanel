@@ -8,6 +8,6 @@ class AdminNavigationMenu extends Component
 {
     public function render()
     {
-        return view('admin-navigation-menu');
+        return view('livewire.admin-navigation-menu');
     }
 }
