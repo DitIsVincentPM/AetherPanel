@@ -5,15 +5,24 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('admin.dashboard') }}">
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.nodes')">
+                        {{ __('Containers') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.containers')">
+                        {{ __('Nodes') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.users')">
+                        {{ __('Users') }}
                     </x-nav-link>
                 </div>
 
@@ -47,8 +56,8 @@
                                 {{ __('Manage Account') }}
                             </div>
                             @if(Auth::user()->hasRole('admin'))
-                                <x-dropdown-link href="{{ route('admin.dashboard') }}">
-                                    {{ __('Go to Admin View') }}
+                                <x-dropdown-link href="{{ route('dashboard') }}">
+                                    {{ __('Leave Admin View') }}
                                 </x-dropdown-link>
                                 <div class="border-t border-gray-200"></div>
                             @endif

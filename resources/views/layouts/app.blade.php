@@ -32,6 +32,21 @@
                 </header>
             @endif
 
+            <!-- Page Heading -->
+
+            @if(isset($subnav))
+                <div class="bg-gray-200">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="flex justify-between h-12">
+                            <div class="flex">
+                                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    {{ $subnav }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <!-- Page Content -->
             <main>
                 {{ $slot }}

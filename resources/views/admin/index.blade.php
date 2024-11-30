@@ -4,11 +4,9 @@
             {{ __('Admin | Dashboard') }}
         </h2>
     </x-slot>
-    <div class="justify-center items-center flex">
-        <div class="container">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 gap-10">
-                <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div>
                         <div class="flex items-center justify-between">
                             <h1 class="uppercase font-bold">Container List</h1>
                             <x-button>Create New</x-button>
@@ -20,10 +18,8 @@
                                 <x-card class="mt-6">It seems like there are no containers.</x-card>
                             @endforelse
                         </div>
-                    </div>
                 </div>
-                <div class="py-12">
-                    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div>
                         <div class="flex items-center justify-between">
                             <h1 class="uppercase font-bold">Nodes List</h1>
                             <x-button>Create New</x-button>
@@ -35,9 +31,7 @@
                                 <x-card class="mt-6">It seems like there are no containers.</x-card>
                             @endforelse
                         </div>
-                    </div>
-                </div>
+                 </div>
             </div>
-        </div>
     </div>
 </x-admin-layout>

@@ -21,11 +21,13 @@
                 </div>
             </div>
         </div>
-
     </x-slot>
 
-    <div class="justify-center items-center flex">
-        <div class="py-12 container">
+    <x-slot name="subnav">
+      <x-container-nav></x-container-nav>
+    </x-slot>
+
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="w-full mb-4">
                 <div class="flex items-center justify-between">
                     <h1 class="uppercase font-bold">Console Interface</h1>
@@ -70,7 +72,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </x-app-layout>

@@ -28,5 +28,14 @@ Route::middleware([
 
     Route::group(['middleware' => Admin::class, 'prefix' => 'admin'], function () {
         Route::get('/dashboard', [AdminIndexController::class, 'index'])->name('admin.dashboard');
+        Route::group(['prefix' => 'container'], function () {
+            Route::get('/', [IndexController::class, 'index'])->name('admin.containers');
+            Route::get('/{id}', [IndexController::class, 'show'])->name('admin.container.index');
+            Route::get('/{id}/settings', [IndexController::class, 'settings'])->name('admin.container.settings');
+        });
+        Route::group(['prefix' => 'nodes'], function () {
+            Route::get('/', [IndexController::class, 'index'])->name('admin.nodes');
+            Route::get('/{id}/settings', [IndexController::class, 'settings'])->name('admin.nodes.settings');
+        });
     });
 });

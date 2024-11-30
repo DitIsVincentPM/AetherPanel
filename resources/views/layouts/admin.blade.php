@@ -21,7 +21,7 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            @livewire('admin-navigation-menu')
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -32,6 +32,19 @@
                 </header>
             @endif
 
+            @if(isset($subnav))
+                <div class="bg-gray-200">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="flex justify-between h-12">
+                            <div class="flex">
+                                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    {{ $subnav }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <!-- Page Content -->
             <main>
                 {{ $slot }}

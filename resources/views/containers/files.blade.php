@@ -23,8 +23,11 @@
         </div>
     </x-slot>
 
-    <div class="justify-center items-center flex">
-        <div class="py-12 container">
+    <x-slot name="subnav">
+        <x-container-nav></x-container-nav>
+    </x-slot>
+
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="w-full mb-4 flex justify-between items-center">
                 <div>
                     <h1 class="uppercase font-bold">File System</h1>
@@ -78,5 +81,4 @@
                 </table>
             </div>
         </div>
-    </div>
 </x-app-layout>
